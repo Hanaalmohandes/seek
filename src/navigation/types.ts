@@ -1,4 +1,4 @@
-// Typed navigation (Lab 03, Part 4): one param list per navigator.
+// Typed navigation: one param list per navigator.
 // Expo Router builds the navigators from the files in src/app, so these types describe
 // each route's params and are used with useLocalSearchParams<...>() and the href helpers below.
 import type { Href } from 'expo-router';

@@ -1,4 +1,4 @@
-// Design tokens: every colour, spacing step, radius and font lives here (Lab 03, Part 2).
+// Shared design tokens for colours, spacing, radii and fonts.
 // tailwind.config.js reads this file too, so NativeWind classes like `bg-navy` or `rounded-md`
 // and the SVG map always use the same values.
 

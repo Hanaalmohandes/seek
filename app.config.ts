@@ -1,4 +1,4 @@
-// App config with three variants (Lab 03, Part 5). APP_VARIANT is set per build profile in eas.json.
+// App config with three variants. APP_VARIANT is set per build profile in eas.json.
 // Each variant gets its own name and bundle id, so dev, staging and production can be installed side by side.
 import type { ExpoConfig } from 'expo/config';
 
