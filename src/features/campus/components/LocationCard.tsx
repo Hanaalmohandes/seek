@@ -1,5 +1,5 @@
 // One place in a list: building plate, name, where it is, and its type icon.
-// Like MovieCard in Lab 02: receives one typed `location` prop and links to its details
+// Receives one typed `location` prop and links to its details
 // (here, the Directions screen) with <Link asChild>.
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Link } from 'expo-router';

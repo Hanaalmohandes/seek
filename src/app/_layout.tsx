@@ -19,7 +19,7 @@ export { ErrorBoundary } from 'expo-router';
 SplashScreen.preventAutoHideAsync();
 
 // Root stack (RootStackParamList in @/navigation/types), wrapped in the feature's provider.
-// Navigators are chosen by movement (Lab 03): tabs for the equal areas (Map, Search),
+// Navigators are chosen by movement: tabs for the equal areas (Map, Search),
 // stack screens for drilling down into one building or place (building/[id], directions/[id]).
 // Expo Router creates the NavigationContainer, so we don't add one.
 export default function RootLayout() {
