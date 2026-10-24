@@ -43,6 +43,8 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="building/[id]" options={{ headerShown: false }} />
         <Stack.Screen name="directions/[id]" options={{ headerShown: false }} />
+        <Stack.Screen name="facility/[id]" options={{ headerShown: false }} />
+        <Stack.Screen name="announcements" options={{ headerShown: false }} />
       </Stack>
     </LocationsProvider>
   );
