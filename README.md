@@ -1,9 +1,3 @@
-# Seek
-
-A campus navigation app for BUE, built with Expo, TypeScript and NativeWind.
-
-**Member 1: Hana — 239489**  
-Responsible for Campus Map, Location Search, Building Details and Directions.
 
 Sprint 01 is a UI prototype. Search results, walking routes and opening hours use sample data. Live search, GPS and route-finding are planned for later.
 

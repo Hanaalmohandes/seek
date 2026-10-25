@@ -47,6 +47,19 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="facilities"
+        options={{
+          title: 'Facilities',
+          tabBarIcon: ({ color }) => (
+            <SymbolView
+              name={{ ios: 'building.2.fill', android: 'apartment', web: 'apartment' }}
+              tintColor={color}
+              size={26}
+            />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

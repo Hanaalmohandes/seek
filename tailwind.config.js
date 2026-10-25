@@ -1,9 +1,12 @@
+/* global __filename */
 const jiti = require('jiti')(__filename);
 const { colors, radius, fonts } = jiti('./src/theme/tokens.ts');
 
 module.exports = {
+  darkMode: 'class',
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   presets: [require('nativewind/preset')],
+  plugins: [],
   theme: {
     extend: {
       colors,
@@ -15,5 +18,4 @@ module.exports = {
       },
     },
   },
-  plugins: [],
 };

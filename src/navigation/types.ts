@@ -4,12 +4,15 @@ export type MainTabParamList = {
   index: undefined;
   search: { q?: string };
   schedule: undefined;
+  facilities: undefined;
 };
 
 export type RootStackParamList = {
   '(tabs)': { screen: keyof MainTabParamList };
   'building/[id]': { id: string };
   'directions/[id]': { id: string; from?: string };
+  'facility/[id]': { id: string };
+  announcements: { facilityId?: string };
   'lecture/[id]': { id: string };
   'lecture/edit': { id?: string };
 };
