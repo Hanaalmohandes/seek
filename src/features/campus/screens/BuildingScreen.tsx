@@ -1,6 +1,3 @@
-// Building Details (UC1: Navigate Campus). Route: src/app/building/[id].tsx
-// UI prototype: an illustrated building, its key facts and the places inside,
-// with a button to get directions. Opening hours are sample content.
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Link, router, useLocalSearchParams } from 'expo-router';
@@ -46,7 +43,6 @@ export default function BuildingScreen() {
   const { getBuilding, locationsIn } = useLocations();
   const building = getBuilding(id);
 
-  // Error state: the link points to a building that isn't on the map.
   if (!building) {
     return (
       <View style={{ paddingTop: insets.top + 8 }} className="flex-1 bg-paper px-5">
@@ -75,19 +71,16 @@ export default function BuildingScreen() {
 
   return (
     <View className="flex-1 bg-paper">
-      {/* Illustration */}
       <View style={{ height: 250 }}>
         <BuildingHero building={building} />
         <View style={{ top: insets.top + 8 }} className="absolute left-5">
           <IconButton icon="arrow-back" label="Go back" onPress={() => router.back()} />
         </View>
       </View>
-
       <ScrollView
         className="-mt-6 flex-1 rounded-t-3xl border-t border-line bg-surface"
         contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}
         contentContainerClassName="gap-5 px-5 pt-6">
-        {/* Title */}
         <View className="flex-row items-center gap-4">
           <BuildingPlate code={building.code} size="md" />
           <View className="flex-1">
@@ -105,19 +98,14 @@ export default function BuildingScreen() {
             ))}
           </View>
         </View>
-
-        {/* Key facts */}
         <View className="flex-row gap-3">
           <Fact icon="layers-outline" label="Places inside" value={`${places.length}`} />
           <Fact icon="accessibility" label="Access" value="Step-free" />
           <Fact icon="time-outline" label="Open Sun–Thu" value={SAMPLE_HOURS} />
         </View>
-
         <Link href={routes.directions({ id: building.id })} asChild>
           <AppButton label="Get directions" icon="walk" />
         </Link>
-
-        {/* Places inside, grouped by type */}
         <View className="gap-4">
           <Text className="font-heavy text-lg text-navy">Inside this building</Text>
           {groups.length === 0 ? (

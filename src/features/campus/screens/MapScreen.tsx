@@ -1,9 +1,7 @@
-// Campus Map tab (UC1: Navigate Campus). Route: src/app/(tabs)/index.tsx
-// UI prototype: tapping a building opens its panel; filter chips show their selected state only.
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Link } from 'expo-router';
 import { useRef, useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View, type ScrollViewInstance } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -26,7 +24,7 @@ export default function MapScreen() {
   const { buildings, getBuilding, locationsIn } = useLocations();
   const [filter, setFilter] = useState<LocationType | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const mapScroll = useRef<ScrollView>(null);
+  const mapScroll = useRef<ScrollViewInstance>(null);
   const openedAtGate = useRef(false);
 
   const selected = selectedId ? getBuilding(selectedId) : undefined;
@@ -34,13 +32,11 @@ export default function MapScreen() {
 
   return (
     <View className="flex-1 bg-paper">
-      {/* Header: title, search and filters */}
       <View style={{ paddingTop: insets.top + 12 }} className="gap-4 pb-4">
         <View className="px-5">
           <Text className="font-heavy text-3xl text-navy">Seek</Text>
           <Text className="font-body text-sm text-slate">Find any room on campus</Text>
         </View>
-
         <Link href={routes.search()} asChild>
           <Pressable
             accessibilityRole="search"
@@ -50,17 +46,13 @@ export default function MapScreen() {
             <Text className="flex-1 font-body text-base text-slate">Search faculties, labs, offices</Text>
           </Pressable>
         </Link>
-
         <TypeChips value={filter} onChange={setFilter} />
       </View>
-
-      {/* Map: full width for legible labels; scroll to see the whole campus */}
       <View className="flex-1 bg-ground">
         <ScrollView
           ref={mapScroll}
           contentContainerClassName="pb-8"
           onContentSizeChange={() => {
-            // Open at the Main Gate end of campus.
             if (!openedAtGate.current) {
               openedAtGate.current = true;
               mapScroll.current?.scrollToEnd({ animated: false });
@@ -74,8 +66,6 @@ export default function MapScreen() {
           </View>
         </ScrollView>
       </View>
-
-      {/* Bottom sheet: selected building, or the list of buildings */}
       <View className="-mt-5 rounded-t-3xl border-t border-line bg-surface pb-4 pt-5">
         {selected ? (
           <Animated.View key={selected.id} entering={FadeInDown.duration(220)}>
@@ -95,7 +85,6 @@ export default function MapScreen() {
                   onPress={() => setSelectedId(null)}
                 />
               </View>
-
               <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2">
                 {places.map((place) => (
                   <Link key={place.id} href={routes.directions({ id: place.id })} asChild>
@@ -106,7 +95,6 @@ export default function MapScreen() {
                   </Link>
                 ))}
               </ScrollView>
-
               <View className="flex-row gap-3">
                 <View className="flex-1">
                   <Link href={routes.building({ id: selected.id })} asChild>

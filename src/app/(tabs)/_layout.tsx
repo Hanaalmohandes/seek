@@ -1,5 +1,3 @@
-// Bottom tabs (MainTabParamList in @/navigation/types).
-// Member 1's tabs are Map and Search; teammates add their feature's tabs here.
 import { Tabs } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 
@@ -30,6 +28,19 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <SymbolView
               name={{ ios: 'magnifyingglass', android: 'search', web: 'search' }}
+              tintColor={color}
+              size={26}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="schedule"
+        options={{
+          title: 'Schedule',
+          tabBarIcon: ({ color }) => (
+            <SymbolView
+              name={{ ios: 'calendar', android: 'calendar_month', web: 'calendar_month' }}
               tintColor={color}
               size={26}
             />

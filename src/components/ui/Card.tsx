@@ -1,4 +1,3 @@
-// Shared card surface. Pass `onPress` to make the whole card tappable.
 import type { PropsWithChildren } from 'react';
 import { Pressable, View } from 'react-native';
 
@@ -8,7 +7,7 @@ type Props = PropsWithChildren<{
   variant?: Variant;
   onPress?: () => void;
   accessibilityLabel?: string;
-  className?: string; // layout only (width, direction, gap); the card owns its colours
+  className?: string;
 }>;
 
 const STYLES: Record<Variant, string> = {

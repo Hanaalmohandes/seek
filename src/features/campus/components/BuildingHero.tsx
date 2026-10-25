@@ -1,6 +1,3 @@
-// Large illustration of one building for the Building Details screen:
-// sky, lawn, paved path, trees and lamps around a front view of the building
-// (lit windows on each floor, a gold door and the building number on a sign).
 import Svg, {
   Circle,
   Defs,
@@ -21,7 +18,7 @@ import { Bush, Lamp, Tree } from './MapScenery';
 const WALL = '#0A2240';
 const WALL_SIDE = '#071A33';
 const ROOF = '#24456F';
-const WINDOW_LIT = '#F7DDB2';
+const WINDOW_LIT = '#FDE8E9';
 const WINDOW_DARK = '#2B4A73';
 
 type Props = { building: Building };
@@ -39,8 +36,6 @@ export function BuildingHero({ building }: Props) {
           <Stop offset="1" stopColor="#F2F5F9" />
         </LinearGradient>
       </Defs>
-
-      {/* Sky with soft clouds */}
       <Rect x={0} y={0} width={400} height={240} fill="url(#sky)" />
       <G fill={colors.surface} opacity={0.85}>
         <Ellipse cx={70} cy={46} rx={26} ry={9} />
@@ -48,22 +43,18 @@ export function BuildingHero({ building }: Props) {
         <Ellipse cx={320} cy={30} rx={22} ry={7} />
         <Ellipse cx={336} cy={25} rx={13} ry={7} />
       </G>
-
-      {/* Lawn and the paved path to the door */}
       <Rect x={0} y={188} width={400} height={52} fill="#BFD7AE" />
       <Rect x={0} y={188} width={400} height={6} fill="#A9C893" />
       <Path d="M182 192 L218 192 L250 240 L150 240 Z" fill="#E7ECF2" />
       <Path d="M182 192 L218 192 L222 198 L178 198 Z" fill="#CBD4DF" />
-
       {isBus ? (
         <G>
-          {/* Parking bay with a bus */}
           <Rect x={70} y={150} width={260} height={46} rx={6} fill="#D3DAE4" />
           {[0, 1, 2, 3, 4, 5].map((i) => (
             <Rect key={i} x={86 + i * 40} y={154} width={3} height={14} fill={colors.surface} />
           ))}
           <Ellipse cx={200} cy={192} rx={96} ry={8} fill={WALL} opacity={0.2} />
-          <Rect x={110} y={112} width={180} height={70} rx={14} fill="#B98622" />
+          <Rect x={110} y={112} width={180} height={70} rx={14} fill="#A9232C" />
           <Rect x={110} y={108} width={180} height={34} rx={14} fill={colors.gold} />
           {[0, 1, 2, 3, 4].map((i) => (
             <Rect key={i} x={124 + i * 30} y={118} width={22} height={18} rx={3} fill="#EAF2FA" />
@@ -76,20 +67,16 @@ export function BuildingHero({ building }: Props) {
         </G>
       ) : (
         <G>
-          {/* Shadow and side wall give the building depth */}
           <Ellipse cx={208} cy={192} rx={130} ry={9} fill={WALL} opacity={0.18} />
           <Path d="M300 64 L322 76 L322 192 L300 192 Z" fill={WALL_SIDE} />
           <Rect x={92} y={64} width={208} height={128} fill={WALL} />
-          {/* Roof parapet */}
           <Rect x={86} y={52} width={220} height={14} rx={3} fill={ROOF} />
           <Path d="M306 52 L328 64 L328 76 L306 66 Z" fill="#1B3657" />
-
-          {/* Windows: three floors */}
           {[0, 1, 2].map((floor) =>
             Array.from({ length: 8 }, (_, i) => {
               const x = 106 + i * 24;
               const y = 78 + floor * 30;
-              if (floor === 2 && i >= 3 && i <= 4) return null; // door goes here
+              if (floor === 2 && i >= 3 && i <= 4) return null;
               const lit = (floor * 3 + i) % 4 !== 1;
               return (
                 <G key={`${floor}-${i}`}>
@@ -101,7 +88,6 @@ export function BuildingHero({ building }: Props) {
           )}
 
           {isFoodCourt && (
-            // Striped café awning across the ground floor
             <G>
               {Array.from({ length: 13 }, (_, i) => (
                 <Rect
@@ -116,19 +102,17 @@ export function BuildingHero({ building }: Props) {
             </G>
           )}
 
-          {/* Entrance: canopy, door and the building number sign */}
           <Rect x={168} y={140} width={64} height={6} rx={2} fill={colors.gold} />
           <Rect x={178} y={146} width={44} height={46} rx={3} fill={colors.gold} />
           <Rect x={182} y={150} width={17} height={42} rx={2} fill="#1C3A63" />
           <Rect x={201} y={150} width={17} height={42} rx={2} fill="#1C3A63" />
           <Rect x={200 - codeW / 2} y={30} width={codeW} height={24} rx={12} fill={colors.gold} />
-          <SvgText x={200} y={47} fontSize={15} fontFamily={fonts.heavy} fill={WALL} textAnchor="middle">
+          <SvgText x={200} y={47} fontSize={15} fontFamily={fonts.heavy} fill={colors.surface} textAnchor="middle">
             {building.code}
           </SvgText>
         </G>
       )}
 
-      {/* Trees, bushes and lamps around the entrance */}
       <Tree x={44} y={160} r={26} />
       <Tree x={356} y={158} r={24} />
       <Tree x={20} y={180} r={14} />

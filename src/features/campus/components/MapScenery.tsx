@@ -1,6 +1,3 @@
-// Illustrated scenery for the campus map: trees, hedges, lawns, theatres, fountain, lamps, gates.
-// Every piece is drawn with a little depth (a shadow, a lit top and a darker side)
-// so the map reads as an illustration rather than flat shapes.
 import { Circle, Ellipse, G, Line, Path, Rect, Text as SvgText } from 'react-native-svg';
 
 import { C, FONT } from '@/theme/tokens';
@@ -44,7 +41,6 @@ export function Bush({ x, y, r = 5 }: { x: number; y: number; r?: number }) {
 
 const FLOWER_COLOURS = ['#F2A7B5', '#FFFFFF', '#F6D36B', '#F2A7B5', '#C9B6F0'];
 
-/** A lawn with mowing stripes, a soft edge, flowers and bushes along the bottom. */
 export function Lawn({ x, y, width, height }: { x: number; y: number; width: number; height: number }) {
   const stripes = Math.floor((width - 12) / 12);
   const flowers = Array.from({ length: 9 }, (_, i) => ({
@@ -74,7 +70,6 @@ export function Lawn({ x, y, width, height }: { x: number; y: number; width: num
   );
 }
 
-/** A row of bushes following the inside of the campus boundary, with gaps for the gates. */
 export function Hedge({ points }: { points: { x: number; y: number }[] }) {
   return (
     <G>
@@ -92,7 +87,6 @@ export function Hedge({ points }: { points: { x: number; y: number }[] }) {
   );
 }
 
-/** Stepped stone seating around a stage, seen from slightly above. */
 export function Theatre({ name, x, y, radius }: { name: string; x: number; y: number; radius: number }) {
   const half = (r: number, dy = 0) => `M${x - r} ${y + dy} A${r} ${r} 0 0 1 ${x + r} ${y + dy} Z`;
   const tiers = [0, 1, 2, 3].map((t) => radius - t * 8);
@@ -106,7 +100,7 @@ export function Theatre({ name, x, y, radius }: { name: string; x: number; y: nu
           <Path d={half(r)} fill={i % 2 ? STONE_LIGHT : STONE} />
         </G>
       ))}
-      {/* Aisles */}
+
       {[-0.5, 0.5].map((a) => (
         <Line
           key={a}
@@ -118,7 +112,7 @@ export function Theatre({ name, x, y, radius }: { name: string; x: number; y: nu
           strokeWidth={2}
         />
       ))}
-      {/* Orchestra and stage */}
+
       <Path d={half(inner, 2)} fill={STONE_SIDE} />
       <Path d={half(inner)} fill="#F3F5F8" />
       <Rect x={x - radius * 0.62} y={y - 1} width={radius * 1.24} height={5} rx={1.5} fill={STONE} />
@@ -178,7 +172,6 @@ export function Plaza({ x, y }: { x: number; y: number }) {
   );
 }
 
-/** A low garden wall seen from above: lit top, darker front face. */
 export function LowWall({ x1, x2, y }: { x1: number; x2: number; y: number }) {
   return (
     <G>
@@ -188,7 +181,6 @@ export function LowWall({ x1, x2, y }: { x1: number; x2: number; y: number }) {
   );
 }
 
-/** A gate: two stone pillars and the gate number between them. */
 export function Gate({ x, y, number, side }: { x: number; y: number; number: number; side: string }) {
   const vertical = side !== 'bottom';
   const pillars = vertical
@@ -211,7 +203,7 @@ export function Gate({ x, y, number, side }: { x: number; y: number; number: num
       ))}
       <Rect x={x - 12} y={y - 11} width={24} height={24} rx={6} fill="#081A33" />
       <Rect x={x - 12} y={y - 13} width={24} height={22} rx={6} fill={C.navy} stroke={C.gold} strokeWidth={1.2} />
-      <SvgText x={x} y={y + 3} fontSize={13} fontFamily={FONT.heavy} fill={C.gold} textAnchor="middle">
+      <SvgText x={x} y={y + 3} fontSize={13} fontFamily={FONT.heavy} fill={C.white} textAnchor="middle">
         {number}
       </SvgText>
     </G>

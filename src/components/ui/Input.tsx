@@ -1,4 +1,3 @@
-// Shared text input with an optional leading icon and a clear button.
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Pressable, TextInput, View, type TextInputProps } from 'react-native';
 
