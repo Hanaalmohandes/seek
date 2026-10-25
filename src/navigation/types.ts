@@ -5,12 +5,15 @@ import type { Href } from 'expo-router';
 
 /** Bottom tabs — src/app/(tabs)/_layout.tsx */
 export type MainTabParamList = {
+  facilities: undefined;
   index: undefined; // Campus Map
   search: { q?: string }; // Location Search, optionally pre-filled
 };
 
 /** Root stack — src/app/_layout.tsx */
 export type RootStackParamList = {
+  'facility/[id]': { id: string };
+  announcements: { facilityId?: string };
   '(tabs)': { screen: keyof MainTabParamList }; // the nested tab navigator
   'building/[id]': { id: string }; // building id, e.g. "12"
   'directions/[id]': { id: string; from?: string }; // place or building id, optional start point id
