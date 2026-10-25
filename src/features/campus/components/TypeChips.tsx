@@ -1,4 +1,3 @@
-// Horizontal filter: All, Faculties, Labs & studios, Facilities, Offices.
 import type Ionicons from '@expo/vector-icons/Ionicons';
 import { ScrollView } from 'react-native';
 

@@ -1,19 +1,14 @@
-// Shared design tokens for colours, spacing, radii and fonts.
-// tailwind.config.js reads this file too, so NativeWind classes like `bg-navy` or `rounded-md`
-// and the SVG map always use the same values.
-
-// BUE-inspired palette: navy primary with a blond-gold accent.
 export const colors = {
-  navy: '#0A2240', // primary — buttons, building walls, headings
-  'navy-soft': '#1C3A63', // pressed / selected navy
-  gold: '#D4A23A', // accent — route line, plates, icons
-  apricot: '#F7DDB2', // soft highlight behind gold elements
-  paper: '#F5F7FA', // screen background
-  surface: '#FFFFFF', // cards and sheets
-  ground: '#E4EAF1', // map ground
-  lawn: '#CFDFC4', // map green areas
-  slate: '#55657A', // secondary text
-  line: '#D5DDE7', // borders and dividers
+  navy: '#0A2240',
+  'navy-soft': '#1C3A63',
+  gold: '#D73738',
+  apricot: '#FDE8E9',
+  paper: '#F5F7FA',
+  surface: '#FFFFFF',
+  ground: '#E4EAF1',
+  lawn: '#CFDFC4',
+  slate: '#55657A',
+  line: '#D5DDE7',
   danger: '#C2410C', // errors
 } as const;
 
@@ -26,7 +21,6 @@ export const fonts = {
   heavy: 'Overpass_800ExtraBold',
 } as const;
 
-// Short aliases for places Tailwind classes can't reach (SVG drawings, icon colours).
 export const C = {
   navy: colors.navy,
   navySoft: colors['navy-soft'],

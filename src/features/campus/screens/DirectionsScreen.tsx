@@ -1,7 +1,3 @@
-// Directions (UC1: Get Directions). Route: src/app/directions/[id].tsx
-// UI prototype: shows a sample route preview for the chosen place (no route-finding yet).
-// Params (typed in @/navigation/types): `id` is a place (e.g. "law") or a building (e.g. "14");
-// optional `from` pre-selects a starting point chip (e.g. "gate-3").
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
@@ -30,7 +26,6 @@ export default function DirectionsScreen() {
   const place = getLocation(id);
   const building = getBuilding(place?.buildingId ?? id);
 
-  // Error state: the link points to a place that doesn't exist.
   if (!building) {
     return (
       <View style={{ paddingTop: insets.top + 8 }} className="flex-1 bg-paper px-5">
@@ -52,23 +47,20 @@ export default function DirectionsScreen() {
   }
 
   const title = place?.name ?? building.title;
-  const route = sampleRoute(building); // sample preview for the prototype
+  const route = sampleRoute(building);
 
   return (
     <View className="flex-1 bg-paper">
-      {/* Map with the route */}
       <View style={{ height: '46%' }} className="bg-ground pb-6">
         <CampusMap selectedBuildingId={building.id} route={route.points} />
         <View style={{ top: insets.top + 8 }} className="absolute left-5">
           <IconButton icon="arrow-back" label="Go back" onPress={() => router.back()} />
         </View>
       </View>
-
       <ScrollView
         className="-mt-6 flex-1 rounded-t-3xl border-t border-line bg-white"
         contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}
         contentContainerClassName="gap-5 px-5 pt-6">
-        {/* Destination */}
         <View className="flex-row items-center gap-4">
           <BuildingPlate code={building.code} size="md" />
           <View className="flex-1">
@@ -78,11 +70,9 @@ export default function DirectionsScreen() {
             </Text>
           </View>
         </View>
-
-        {/* Walking time */}
         <View className="gap-2 rounded-2xl bg-navy px-5 py-4">
           <View className="flex-row items-end gap-3">
-            <Text className="font-heavy text-4xl text-gold" style={{ includeFontPadding: false }}>
+            <Text className="font-heavy text-4xl text-white" style={{ includeFontPadding: false }}>
               {route.minutes} min
             </Text>
             <Text className="pb-1 font-body text-base text-white">{route.metres} m walk</Text>
@@ -92,8 +82,6 @@ export default function DirectionsScreen() {
             <Text className="font-body text-xs text-apricot">Step-free: ramps across campus walkways</Text>
           </View>
         </View>
-
-        {/* Starting point */}
         <View className="gap-2">
           <Text className="font-semibold text-sm text-slate">Starting from</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2">
@@ -103,8 +91,6 @@ export default function DirectionsScreen() {
             })}
           </ScrollView>
         </View>
-
-        {/* Steps */}
         <View>
           {route.steps.map((step, i) => {
             const last = i === route.steps.length - 1;
@@ -114,7 +100,7 @@ export default function DirectionsScreen() {
                   <View
                     className={`h-8 w-8 items-center justify-center rounded-full ${last ? 'bg-gold' : 'bg-navy'}`}>
                     {last ? (
-                      <Ionicons name="flag" size={15} color={colors.navy} />
+                      <Ionicons name="flag" size={15} color={colors.surface} />
                     ) : (
                       <Text className="font-heavy text-sm text-white">{i + 1}</Text>
                     )}

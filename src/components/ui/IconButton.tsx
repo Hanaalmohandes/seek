@@ -1,4 +1,3 @@
-// Shared round icon button (back, close).
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Pressable } from 'react-native';
 
@@ -8,7 +7,7 @@ type Variant = 'outline' | 'filled';
 
 type Props = {
   icon: keyof typeof Ionicons.glyphMap;
-  label: string; // read by screen readers
+  label: string;
   onPress: () => void;
   variant?: Variant;
 };

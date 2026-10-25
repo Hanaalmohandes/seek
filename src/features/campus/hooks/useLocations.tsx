@@ -1,5 +1,3 @@
-// Campus feature data for the UI prototype: places and buildings (sample data, no actions).
-// LocationsProvider wraps the app in src/app/_layout.tsx; screens read it with useLocations().
 import { createContext, useContext, type PropsWithChildren } from 'react';
 
 import { BUILDINGS } from '../data/campus';

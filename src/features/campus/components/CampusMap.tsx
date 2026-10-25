@@ -1,7 +1,3 @@
-// Illustrated BUE campus map drawn with SVG, following the official printed map.
-// Buildings are drawn in a simple 2.5D style: a lighter roof (with the building
-// number and icon) above a front wall with lit windows and a door.
-// Phase 2 can swap this for Google Maps (react-native-maps) while the screens keep the same props.
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useState } from 'react';
 import { View } from 'react-native';
@@ -15,22 +11,21 @@ import type { Building, MapPoint } from '../types';
 
 type Props = {
   selectedBuildingId?: string | null;
-  highlightedBuildingIds?: string[] | null; // null = no filter, every building at full strength
+  highlightedBuildingIds?: string[] | null;
   route?: MapPoint[] | null;
   onSelectBuilding?: (id: string) => void;
 };
 
 const CAMPUS_FILL = '#EEF2F7';
-const WALL = '#0A2240'; // front wall (BUE navy)
+const WALL = '#0A2240';
 const WALL_SELECTED = '#1C3A63';
 const ROOF = '#24456F';
 const ROOF_SELECTED = '#355C8C';
 const WINDOW = '#F7DDB2';
-const ICON = 17; // map units
+const ICON = 17;
 
 const nodeById = new Map(NODES.map((n) => [n.id, n]));
 
-// Bushes following the inside of the pill-shaped boundary, leaving gaps at the gates.
 const HEDGE_POINTS = (() => {
   const inset = 10;
   const step = 12;
@@ -61,7 +56,6 @@ const HEDGE_POINTS = (() => {
 const plateWidth = (code: string) => Math.max(22, 10 + code.length * 9);
 const roofHeight = (b: Building) => Math.max(28, b.height - 30);
 
-/** Which side of the building faces the central walkway (where its door is). */
 const doorOnRight = (b: Building) => b.x + b.width / 2 < SPINE_X;
 
 function Windows({ b, top, doorX }: { b: Building; top: number; doorX: number }) {
@@ -71,7 +65,7 @@ function Windows({ b, top, doorX }: { b: Building; top: number; doorX: number })
     <G>
       {Array.from({ length: count }, (_, i) => {
         const x = startX + i * 12;
-        if (Math.abs(x + 3.5 - doorX) < 10) return null; // leave room for the door
+        if (Math.abs(x + 3.5 - doorX) < 10) return null;
         return <Rect key={i} x={x} y={top} width={7} height={8} rx={1.5} fill={WINDOW} opacity={0.9} />;
       })}
     </G>
@@ -82,7 +76,6 @@ function BuildingShape({ b, selected, dimmed }: { b: Building; selected: boolean
   const pw = plateWidth(b.code);
 
   if (b.kind === 'area') {
-    // Bus parking bay with a bus, drawn with a lit roof and a darker side.
     const bx = b.x + 44;
     const by = b.y + 16;
     return (
@@ -93,16 +86,16 @@ function BuildingShape({ b, selected, dimmed }: { b: Building; selected: boolean
           <Line key={i} x1={b.x + 44 + i * 12} y1={b.y + 4} x2={b.x + 44 + i * 12} y2={b.y + 12} stroke={C.white} strokeWidth={1.5} />
         ))}
         <Ellipse cx={bx + 27} cy={by + 26} rx={28} ry={4} fill={WALL} opacity={0.2} />
-        <Rect x={bx} y={by + 8} width={52} height={15} rx={4} fill="#B98622" />
+        <Rect x={bx} y={by + 8} width={52} height={15} rx={4} fill="#A9232C" />
         <Rect x={bx} y={by} width={52} height={11} rx={4} fill={C.gold} />
-        <Rect x={bx + 4} y={by + 2.5} width={44} height={2} rx={1} fill="#E8C46E" />
+        <Rect x={bx + 4} y={by + 2.5} width={44} height={2} rx={1} fill="#EE7778" />
         {[0, 1, 2, 3, 4].map((i) => (
           <Rect key={i} x={bx + 4 + i * 8.5} y={by + 12} width={6.5} height={5} rx={1} fill="#EAF2FA" />
         ))}
         <Circle cx={bx + 11} cy={by + 23} r={3.2} fill={WALL} />
         <Circle cx={bx + 41} cy={by + 23} r={3.2} fill={WALL} />
         <Rect x={b.x + 6} y={b.y + 6} width={pw} height={19} rx={9.5} fill={WALL} />
-        <SvgText x={b.x + 6 + pw / 2} y={b.y + 20} fontSize={11} fontFamily={FONT.heavy} fill={C.gold} textAnchor="middle">
+        <SvgText x={b.x + 6 + pw / 2} y={b.y + 20} fontSize={11} fontFamily={FONT.heavy} fill={C.white} textAnchor="middle">
           {b.code}
         </SvgText>
         <SvgText x={b.x + 8} y={b.y + b.height - 6} fontSize={9.5} fontFamily={FONT.semibold} fill={WALL}>
@@ -120,17 +113,12 @@ function BuildingShape({ b, selected, dimmed }: { b: Building; selected: boolean
 
   return (
     <G opacity={dimmed ? 0.28 : 1}>
-      {/* Shadow */}
       <Rect x={b.x + 4} y={b.y + 5} width={b.width} height={b.height} rx={9} fill={WALL} opacity={0.16} />
-      {/* Front wall */}
       <Rect x={b.x} y={b.y} width={b.width} height={b.height} rx={9} fill={selected ? WALL_SELECTED : WALL} />
-      {/* Roof with a parapet line */}
       <Rect x={b.x} y={b.y} width={b.width} height={roofH} rx={9} fill={selected ? ROOF_SELECTED : ROOF} />
       <Rect x={b.x} y={wallTop - 6} width={b.width} height={6} fill={selected ? ROOF_SELECTED : ROOF} />
       <Line x1={b.x + 3} y1={wallTop} x2={b.x + b.width - 3} y2={wallTop} stroke={C.white} strokeOpacity={0.35} strokeWidth={1.5} />
-
       {foodCourt ? (
-        // Striped café awning instead of windows
         <G>
           {Array.from({ length: Math.floor((b.width - 12) / 10) }, (_, i) => (
             <Rect key={i} x={b.x + 6 + i * 10} y={wallTop + 2} width={10} height={7} fill={i % 2 ? C.white : C.gold} />
@@ -146,17 +134,12 @@ function BuildingShape({ b, selected, dimmed }: { b: Building; selected: boolean
         <Windows b={b} top={wallTop + 4} doorX={doorX} />
       )}
 
-      {/* Door, on the side facing the walkway */}
       <Rect x={doorX - 5} y={b.y + b.height - 12} width={10} height={12} rx={2} fill={C.gold} />
       <Rect x={doorX - 3} y={b.y + b.height - 10} width={6} height={10} rx={1} fill={WALL} />
-
-      {/* Building number on the roof */}
       <Rect x={b.x + 7} y={b.y + 5} width={pw} height={19} rx={9.5} fill={C.gold} />
-      <SvgText x={b.x + 7 + pw / 2} y={b.y + 19} fontSize={11.5} fontFamily={FONT.heavy} fill={WALL} textAnchor="middle">
+      <SvgText x={b.x + 7 + pw / 2} y={b.y + 19} fontSize={11.5} fontFamily={FONT.heavy} fill={C.white} textAnchor="middle">
         {b.code}
       </SvgText>
-
-      {/* Name sign along the bottom of the wall, away from the door */}
       <SvgText
         x={right ? b.x + 8 : b.x + 26}
         y={b.y + b.height - 4}
@@ -165,7 +148,6 @@ function BuildingShape({ b, selected, dimmed }: { b: Building; selected: boolean
         fill={C.white}>
         {b.shortName}
       </SvgText>
-
       {selected && (
         <Rect x={b.x - 2} y={b.y - 2} width={b.width + 4} height={b.height + 4} rx={11} fill="none" stroke={C.gold} strokeWidth={3} />
       )}
@@ -173,7 +155,6 @@ function BuildingShape({ b, selected, dimmed }: { b: Building; selected: boolean
   );
 }
 
-/** When a route is shown, crop the map to the part of campus the route crosses. */
 const MIN_FOCUS_HEIGHT = 380;
 function focusViewBox(route: MapPoint[], selected: Building | undefined) {
   const ys = [...route.map((p) => p.y), ...(selected ? [selected.y, selected.y + selected.height] : [])];
@@ -198,7 +179,6 @@ export function CampusMap({ selectedBuildingId, highlightedBuildingIds, route, o
   const outlineRight = OUTLINE.x + OUTLINE.width;
   const isDimmed = (id: string) => (highlightedBuildingIds ? !highlightedBuildingIds.includes(id) : false);
 
-  // Icons are drawn as a layer over the SVG, positioned with the same scale the SVG uses.
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [vx, vy, vw, vh] = viewBox.split(' ').map(Number);
   const scale = Math.min(size.width / vw, size.height / vh) || 0;
@@ -211,8 +191,6 @@ export function CampusMap({ selectedBuildingId, highlightedBuildingIds, route, o
       onLayout={(e) => setSize({ width: e.nativeEvent.layout.width, height: e.nativeEvent.layout.height })}>
       <Svg width="100%" height="100%" viewBox={viewBox} preserveAspectRatio="xMidYMid meet" accessibilityLabel="BUE campus map">
         <Rect x={0} y={0} width={MAP_WIDTH} height={MAP_HEIGHT} fill={C.ground} />
-
-        {/* Campus boundary: a fence line, with a hedge of bushes just inside it */}
         <Rect
           x={OUTLINE.x}
           y={OUTLINE.y}
@@ -223,8 +201,6 @@ export function CampusMap({ selectedBuildingId, highlightedBuildingIds, route, o
           stroke={C.slate}
           strokeWidth={1.4}
         />
-
-        {/* Inner walls, with an opening for the central walkway */}
         {WALLS_Y.map((y) => (
           <G key={y}>
             <LowWall x1={OUTLINE.x + 14} x2={SPINE_X - 16} y={y} />
@@ -240,7 +216,6 @@ export function CampusMap({ selectedBuildingId, highlightedBuildingIds, route, o
           <Theatre key={t.name} {...t} />
         ))}
 
-        {/* Walkways: a kerb, the paving, and faint paving joints */}
         {[
           { colour: '#CBD4DF', width: 14 },
           { colour: C.white, width: 10 },
@@ -271,9 +246,7 @@ export function CampusMap({ selectedBuildingId, highlightedBuildingIds, route, o
           <Plaza key={`plaza-${p.y}`} {...p} />
         ))}
         <Fountain {...FOUNTAIN} />
-
         <Hedge points={HEDGE_POINTS} />
-
         {TREES.map((t) => (
           <Tree key={`tree-${t.x}-${t.y}`} {...t} />
         ))}
@@ -297,7 +270,6 @@ export function CampusMap({ selectedBuildingId, highlightedBuildingIds, route, o
           </G>
         )}
 
-        {/* Gates, numbered as on the campus map (drawn last so the route never hides them) */}
         {GATES.map((g) => (
           <G key={g.nodeId} accessibilityLabel={`Gate ${g.number}`}>
             <Gate x={g.x} y={g.y} number={g.number} side={g.side} />
@@ -309,8 +281,6 @@ export function CampusMap({ selectedBuildingId, highlightedBuildingIds, route, o
           </G>
         ))}
       </Svg>
-
-      {/* Building icons (same icons as the printed campus map), on each roof */}
       {scale > 0 && (
         <View pointerEvents="none" style={{ position: 'absolute', left: 0, top: 0, right: 0, bottom: 0 }}>
           {BUILDINGS.filter((b) => b.kind !== 'area').flatMap((b) =>

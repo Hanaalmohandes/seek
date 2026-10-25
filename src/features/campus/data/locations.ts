@@ -1,9 +1,5 @@
 import type { CampusLocation, LocationType } from '../types';
 
-// BUE places, from the official campus map and the university's list of buildings.
-// Floors aren't recorded yet (floor: null) — add them when you know them.
-// Wind Tunnel Lab, Student Union and Copy Center positions come from Google Maps.
-// latitude/longitude: BUE campus centre from Google Maps (used by Google Maps in Phase 2).
 const LAT = 30.1187069;
 const LNG = 31.6104406;
 
@@ -53,7 +49,6 @@ export const LOCATIONS: CampusLocation[] = PLACES.map((p) => ({
   longitude: LNG,
 }));
 
-// How each type is named and drawn across the app.
 export const TYPE_META: Record<LocationType, { label: string; icon: string }> = {
   faculty: { label: 'Faculties', icon: 'school-outline' },
   lab: { label: 'Labs & studios', icon: 'flask-outline' },
@@ -63,7 +58,6 @@ export const TYPE_META: Record<LocationType, { label: string; icon: string }> = 
 
 export const LOCATION_TYPES = Object.keys(TYPE_META) as LocationType[];
 
-/** "ground floor", "floor 2", or null when the floor isn't known. */
 export function floorLabel(floor: number | null) {
   if (floor === null) return null;
   if (floor === 0) return 'ground floor';

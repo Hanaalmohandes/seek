@@ -1,5 +1,3 @@
-// Shared button. Owns its look, pressed state and accessibility;
-// the feature only decides what happens on press.
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Pressable, Text } from 'react-native';
 

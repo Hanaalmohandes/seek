@@ -1,6 +1,3 @@
-// Location Search tab (UC1: Search Location). Route: src/app/(tabs)/search.tsx
-// UI prototype: shows sample "Recent" and "Browse by building" content when the box is empty,
-// and sample results once something is typed. Real filtering comes in Phase 2.
 import { Link, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
@@ -12,10 +9,9 @@ import { routes, type SearchParams } from '@/navigation/types';
 
 import { BuildingPlate } from '../components/BuildingPlate';
 import { LocationCard } from '../components/LocationCard';
-import { TypeChips } from '../components/TypeChips';
 import { SAMPLE_RECENT_IDS, SAMPLE_RESULT_IDS } from '../data/samples';
 import { useLocations } from '../hooks/useLocations';
-import type { Building, CampusLocation, LocationType } from '../types';
+import type { Building, CampusLocation } from '../types';
 
 export default function SearchScreen() {
   const insets = useSafeAreaInsets();
@@ -23,9 +19,7 @@ export default function SearchScreen() {
   const { buildings, getBuilding, getLocation } = useLocations();
 
   const [query, setQuery] = useState(params.q ?? '');
-  const [type, setType] = useState<LocationType | null>(null);
 
-  // Pair each sample place with its building so the card can show "Building 12".
   const withBuilding = (ids: string[]) =>
     ids.flatMap((id) => {
       const place = getLocation(id);
@@ -52,14 +46,9 @@ export default function SearchScreen() {
           accessibilityLabel="Search places on campus"
         />
       </View>
-
-      <View className="pb-3">
-        <TypeChips value={type} onChange={setType} />
-      </View>
-
       {showResults ? (
         <FlatList
-          key="results" // a different key per list, so switching between them never reuses one
+          key="results"
           data={results}
           keyExtractor={(r) => r.place.id}
           keyboardShouldPersistTaps="handled"
@@ -67,7 +56,7 @@ export default function SearchScreen() {
           ListHeaderComponent={
             <Text className="px-4 pb-1 font-body text-sm text-slate">{results.length} places</Text>
           }
-          renderItem={({ item }) => <LocationCard location={item.place} building={item.building} />}
+          renderItem={({ item }) => <LocationCard location={item.place} building={item.building} plateTone="navy" />}
         />
       ) : (
         <FlatList
@@ -85,7 +74,7 @@ export default function SearchScreen() {
                 <Card
                   accessibilityLabel={`${item.title}, ${item.shortName}`}
                   className="flex-row items-center gap-3">
-                  <BuildingPlate code={item.code} />
+                  <BuildingPlate code={item.code} tone="navy" />
                   <View className="flex-1">
                     <Text className="font-semibold text-sm text-navy" numberOfLines={1}>
                       {item.title}

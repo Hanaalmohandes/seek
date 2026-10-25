@@ -1,6 +1,4 @@
-/** @type {import('tailwindcss').Config} */
-// Colours, spacing and radius come from src/theme/tokens.ts — the single source of truth.
-// jiti (shipped with Tailwind) lets this JS config read the TypeScript tokens file.
+/* global __filename */
 const jiti = require('jiti')(__filename);
 const { colors, radius, fonts } = jiti('./src/theme/tokens.ts');
 
@@ -20,8 +18,4 @@ module.exports = {
       },
     },
   },
-  module.exports = {
-  darkMode: 'class',
-  content: ['./src/**/*.{js,jsx,ts,tsx}'],
-  plugins: [],
 };

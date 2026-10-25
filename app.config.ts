@@ -1,5 +1,3 @@
-// App config with three variants. APP_VARIANT is set per build profile in eas.json.
-// Each variant gets its own name and bundle id, so dev, staging and production can be installed side by side.
 import type { ExpoConfig } from 'expo/config';
 
 const variant = process.env.APP_VARIANT ?? 'development';

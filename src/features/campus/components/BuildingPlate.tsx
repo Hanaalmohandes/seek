@@ -1,4 +1,3 @@
-// The building code as a campus-sign plate: gold code on BUE navy ("A", "11", "LIB").
 import { Text, View } from 'react-native';
 
 const SIZES = {
@@ -7,12 +6,12 @@ const SIZES = {
   lg: { box: 'h-16 min-w-16 rounded-2xl px-2', text: ['text-4xl', 'text-3xl', 'text-xl'] },
 };
 
-export function BuildingPlate({ code, size = 'sm' }: { code: string; size?: keyof typeof SIZES }) {
+export function BuildingPlate({ code, size = 'sm', tone = 'accent' }: { code: string; size?: keyof typeof SIZES; tone?: 'accent' | 'navy' }) {
   const s = SIZES[size];
   const text = s.text[Math.min(code.length, 3) - 1];
   return (
-    <View className={`items-center justify-center bg-navy ${s.box}`}>
-      <Text className={`font-heavy text-gold ${text}`} style={{ includeFontPadding: false }}>
+    <View className={`items-center justify-center ${tone === 'navy' ? 'border border-gold bg-navy' : 'bg-gold'} ${s.box}`}>
+      <Text className={`font-heavy text-white ${text}`} style={{ includeFontPadding: false }}>
         {code}
       </Text>
     </View>

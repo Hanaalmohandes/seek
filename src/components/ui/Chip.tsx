@@ -1,4 +1,3 @@
-// Shared selectable chip (filters, starting points).
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Pressable, Text } from 'react-native';
 
