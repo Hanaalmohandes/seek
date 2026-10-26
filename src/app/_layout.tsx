@@ -11,8 +11,9 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
-import { LocationsProvider } from '@/features/campus/hooks/useLocations';
-import { ScheduleProvider } from '@/features/schedule/hooks/useSchedule';
+import { LocationsProvider } from '@/features/campus';
+import { PersonalHubProvider } from '@/features/personal-hub';
+import { ScheduleProvider } from '@/features/schedule';
 import { colors } from '@/theme/tokens';
 
 export { ErrorBoundary } from 'expo-router';
@@ -35,17 +36,19 @@ export default function RootLayout() {
   return (
     <LocationsProvider>
       <ScheduleProvider>
-        <StatusBar style="dark" />
-        <Stack screenOptions={{ contentStyle: { backgroundColor: colors.paper } }}>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="building/[id]" options={{ headerShown: false }} />
-          <Stack.Screen name="directions/[id]" options={{ headerShown: false }} />
-          <Stack.Screen name="facility/[id]" options={{ headerShown: false }} />
-          <Stack.Screen name="announcements" options={{ headerShown: false }} />
-          <Stack.Screen name="favorites" options={{ headerShown: false }} />
-          <Stack.Screen name="lecture/[id]" options={{ headerShown: false }} />
-          <Stack.Screen name="lecture/edit" options={{ headerShown: false, presentation: 'modal' }} />
-        </Stack>
+        <PersonalHubProvider>
+          <StatusBar style="dark" />
+          <Stack screenOptions={{ contentStyle: { backgroundColor: colors.paper } }}>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="building/[id]" options={{ headerShown: false }} />
+            <Stack.Screen name="directions/[id]" options={{ headerShown: false }} />
+            <Stack.Screen name="facility/[id]" options={{ headerShown: false }} />
+            <Stack.Screen name="announcements" options={{ headerShown: false }} />
+            <Stack.Screen name="favorites" options={{ headerShown: false }} />
+            <Stack.Screen name="lecture/[id]" options={{ headerShown: false }} />
+            <Stack.Screen name="lecture/edit" options={{ headerShown: false, presentation: 'modal' }} />
+          </Stack>
+        </PersonalHubProvider>
       </ScheduleProvider>
     </LocationsProvider>
   );

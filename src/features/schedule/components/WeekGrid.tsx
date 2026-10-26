@@ -3,9 +3,10 @@ import { Pressable, Text, View } from 'react-native';
 
 import { routes } from '@/navigation/types';
 
-import { DAYS, toMinutes } from '../data/samples';
+import { DAYS } from '../data/samples';
 import type { Day, Lecture } from '../types';
 import { TYPE_COLORS } from './TypeBadge';
+import { toMinutes } from '../utils/time';
 
 const FIRST_HOUR = 9;
 const LAST_HOUR = 16;

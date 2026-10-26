@@ -56,19 +56,3 @@ export const SAMPLE_ERRORS = {
   time: 'End time must be after the start time.',
   overlap: 'Overlaps with CS 310 Distributed Systems, Mon 10:00 – 11:30.',
 };
-
-export function formatTime(t: string) {
-  const [h, m] = t.split(':').map(Number);
-  const suffix = h >= 12 ? 'pm' : 'am';
-  const hour = h % 12 === 0 ? 12 : h % 12;
-  return `${hour}:${String(m).padStart(2, '0')} ${suffix}`;
-}
-
-export function toMinutes(t: string) {
-  const [h, m] = t.split(':').map(Number);
-  return h * 60 + m;
-}
-
-export function reminderLabel(minutes: number | null) {
-  return minutes === null ? 'Off' : `${minutes} min before`;
-}

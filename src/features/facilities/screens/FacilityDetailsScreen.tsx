@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppButton } from '@/components/ui/AppButton';
 import { Card } from '@/components/ui/Card';
 import { routes } from '@/navigation/types';
-import { facilities, announcements } from '../data';
+import { facilities, announcements } from '../data/samples';
 
 export default function FacilityDetailsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

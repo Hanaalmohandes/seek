@@ -1,18 +1,8 @@
-import { createContext, useContext, type PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 
+import { LocationsContext } from '../contexts/LocationsContext';
 import { BUILDINGS } from '../data/campus';
 import { LOCATIONS } from '../data/locations';
-import type { Building, CampusLocation } from '../types';
-
-type LocationsValue = {
-  locations: CampusLocation[];
-  buildings: Building[];
-  getLocation: (id: string) => CampusLocation | undefined;
-  getBuilding: (id: string) => Building | undefined;
-  locationsIn: (buildingId: string) => CampusLocation[];
-};
-
-const LocationsContext = createContext<LocationsValue | null>(null);
 
 export function LocationsProvider({ children }: PropsWithChildren) {
   const locations = LOCATIONS;
@@ -27,10 +17,4 @@ export function LocationsProvider({ children }: PropsWithChildren) {
       {children}
     </LocationsContext.Provider>
   );
-}
-
-export function useLocations() {
-  const value = useContext(LocationsContext);
-  if (!value) throw new Error('useLocations must be inside LocationsProvider');
-  return value;
 }

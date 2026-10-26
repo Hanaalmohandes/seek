@@ -6,7 +6,8 @@ import { Card } from '@/components/ui/Card';
 import { Chip } from '@/components/ui/Chip';
 import { Input } from '@/components/ui/Input';
 import { AppButton } from '@/components/ui/AppButton';
-import { categories, facilities, type Category } from '../data';
+import { categories, facilities } from '../data/samples';
+import type { Category } from '../types';
 
 export default function FacilitiesScreen() {
   const insets = useSafeAreaInsets();

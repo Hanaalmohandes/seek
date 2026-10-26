@@ -5,9 +5,10 @@ import { Pressable, Text, View } from 'react-native';
 import { routes } from '@/navigation/types';
 import { colors } from '@/theme/tokens';
 
-import { formatTime } from '../data/samples';
+
 import type { Lecture } from '../types';
 import { TYPE_COLORS, TypeBadge } from './TypeBadge';
+import { formatTime } from '../utils/time';
 
 export function LectureCard({ lecture, now = false }: { lecture: Lecture; now?: boolean }) {
   return (
