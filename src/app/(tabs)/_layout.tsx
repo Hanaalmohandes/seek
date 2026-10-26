@@ -31,7 +31,7 @@ export default function TabLayout() {
         title: 'Profile',
         tabBarIcon: ({ color }) => <SymbolView name={{ ios: 'person.crop.circle', android: 'account_circle', web: 'account_circle' }} tintColor={color} size={26} />,
       }} />
-      <Tabs.Screen name="search" options={{ href: null }} />
+      <Tabs.Screen name="search" options={{ tabBarItemStyle: { display: 'none' } }} />
     </Tabs>
   );
 }

@@ -19,6 +19,10 @@ Seek is a UI prototype with four feature modules:
 
 Profile details and favorites save on the device. The timetable, campus notices, opening hours and route previews remain sample data. Cloud accounts, live GPS, live university data and notification delivery are planned work.
 
+## Reminder requirement
+
+**FR7:** Profile preferences and new lecture forms default to a reminder 30 minutes before class. Students can choose another time or turn reminders off. The prototype stores profile preferences locally; notification delivery is planned work.
+
 ## Screen map
 
 ```text

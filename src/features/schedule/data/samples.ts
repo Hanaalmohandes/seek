@@ -1,5 +1,7 @@
 import type { Day, Lecture, LectureType } from '../types';
 
+import { DEFAULT_REMINDER_MINUTES } from './reminders';
+
 export const DAYS: { id: Day; short: string; long: string; date: number }[] = [
   { id: 'sun', short: 'Sun', long: 'Sunday', date: 25 },
   { id: 'mon', short: 'Mon', long: 'Monday', date: 26 },
@@ -47,7 +49,7 @@ export const SAMPLE_DRAFT = {
   day: 'mon' as Day,
   start: '11:00',
   end: '10:30',
-  reminderMinutes: 15 as number | null,
+  reminderMinutes: DEFAULT_REMINDER_MINUTES as number | null,
 };
 
 export const SAMPLE_ERRORS = {
