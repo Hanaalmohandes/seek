@@ -1,1 +1,1 @@
-export { default } from '@/features/campus/screens/MapScreen';
+export { default } from '@/features/personal-hub/screens/HomeScreen';

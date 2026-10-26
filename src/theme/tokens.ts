@@ -9,7 +9,7 @@ export const colors = {
   lawn: '#CFDFC4',
   slate: '#55657A',
   line: '#D5DDE7',
-  danger: '#C2410C', // errors
+  danger: '#C2410C',
 } as const;
 
 export const spacing = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 } as const;

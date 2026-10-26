@@ -1,5 +1,6 @@
+# Seek
 
-Sprint 01 is a UI prototype. Search results, walking routes and opening hours use sample data. Live search, GPS and route-finding are planned for later.
+A campus navigation and personal dashboard app for BUE.
 
 ## Run the app
 
@@ -12,25 +13,30 @@ Scan the QR code with Expo Go, or press `w` to open the web version.
 
 ## Screens
 
-- **Campus Map:** tap a building to see its places, details and directions.
-- **Building Details:** view a building illustration, key facts and places inside.
-- **Location Search:** browse buildings and view sample search results.
-- **Directions:** view a sample route, walking time and steps.
+The app opens on the dashboard. The bottom tabs are Home, Map, Schedule, Facilities and Profile.
 
-Campus Map and Building Details are the two main Sprint 01 screens. All screens share the same colours, fonts, cards and buttons.
+- **Home:** today's sample lectures, saved-place count and shortcuts.
+- **Map and Search:** browse campus buildings and places.
+- **Building Details and Directions:** view a building and a sample walking route.
+- **Schedule:** browse sample lectures and open their details or form screens.
+- **Facilities:** browse services, facility details and sample announcements.
+- **Favorites:** open from Home to pin places and get directions.
+- **Profile:** edit student details, choose a photo and save preferences locally.
+
+Search results, routes, opening hours, lectures and announcements use sample data. Profile details, reminder preferences and favorites save on the device. Live GPS, cloud accounts and notification delivery are outside the current UI prototype.
 
 ## Sprint 01 — Architecture decisions
 
-- **Navigation:** bottom tabs make Map and Search easy to switch between. Stack screens open Building Details and Directions, with a back button to return.
-- **Route parameters:** `building/[id]` uses a building ID, such as `12`, to display the selected building. `directions/[id]` accepts a place or building ID. Parameter types and link helpers live in `src/navigation/types.ts`.
-- **Folders:** campus screens, components and data are grouped in `src/features/campus/`. Shared buttons, inputs and cards live in `src/components/ui/`. Route files live in `src/app/`.
-- **Imports:** `@/` points to `src/`, making shared imports shorter and easier to read.
-- **Design:** `src/theme/tokens.ts` defines shared colours, fonts, spacing and radii. NativeWind uses the colour, font and radius tokens. Navy is used for headings and actions, gold for accents, and light backgrounds for readable cards.
-- **Environments:** `app.config.ts` and `eas.json` define development, staging and production variants with separate names and app IDs. `.env.example` contains public example settings only. Real `.env` files are ignored by Git; no secrets belong in public variables.
+- **Navigation:** bottom tabs connect the main areas. Stack screens open Favorites, details and forms, with a back action. Home is the opening screen.
+- **Route parameters:** building, directions, facility and lecture screens use an `id`. Typed links and parameter definitions live in `src/navigation/types.ts`.
+- **Folders:** `src/features/` groups campus, schedule, facilities and personal-hub code. Shared controls live in `src/components/ui/`. Route files stay in `src/app/`.
+- **Imports:** `@/` points to `src/`.
+- **Design:** `src/theme/tokens.ts` provides shared colours, fonts, spacing and radii. The palette uses navy, BUE red and light backgrounds.
+- **Environments:** `app.config.ts`, `eas.json` and `.env.example` provide development, staging and production examples. Real environment files are ignored by Git.
 
 ## Project brief
 
-See [docs/product-brief.md](docs/product-brief.md) for the app's purpose, scope and screen map.
+See [docs/product-brief.md](docs/product-brief.md) for the scope and screen map.
 
 ## Checks
 

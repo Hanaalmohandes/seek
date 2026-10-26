@@ -28,6 +28,11 @@ export default <ExpoConfig>{
   web: { bundler: 'metro', output: 'single', favicon: './assets/images/favicon.png' },
   plugins: [
     'expo-router',
+    ['expo-image-picker', {
+      photosPermission: 'Allow Seek to choose your profile photo.',
+      cameraPermission: 'Allow Seek to take your profile photo.',
+      microphonePermission: false,
+    }],
     [
       'expo-splash-screen',
       { image: './assets/images/splash-icon.png', resizeMode: 'contain', backgroundColor: '#ffffff' },

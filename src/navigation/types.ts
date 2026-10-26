@@ -5,10 +5,13 @@ export type MainTabParamList = {
   search: { q?: string };
   schedule: undefined;
   facilities: undefined;
+  map: undefined;
+  profile: undefined;
 };
 
 export type RootStackParamList = {
   '(tabs)': { screen: keyof MainTabParamList };
+  favorites: undefined;
   'building/[id]': { id: string };
   'directions/[id]': { id: string; from?: string };
   'facility/[id]': { id: string };
@@ -24,7 +27,12 @@ export type LectureParams = RootStackParamList['lecture/[id]'];
 export type LectureFormParams = RootStackParamList['lecture/edit'];
 
 export const routes = {
-  map: (): Href => '/',
+  home: (): Href => '/',
+  favorites: (): Href => '/favorites',
+  profile: (): Href => '/profile',
+  announcements: (): Href => '/announcements',
+  facilities: (): Href => '/facilities',
+  map: (): Href => '/map',
   search: (params: SearchParams = {}): Href => ({ pathname: '/search', params }),
   building: ({ id }: BuildingParams): Href => ({ pathname: '/building/[id]', params: { id } }),
   directions: ({ id, from }: DirectionsParams): Href => ({
