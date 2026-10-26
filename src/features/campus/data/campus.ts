@@ -130,7 +130,7 @@ export const START_POINTS: StartPoint[] = [
 ];
 
 export const LAWNS = [
-  { x: RIGHT_X, y: rowY(1), width: COL_W, height: ROW_H }, // garden beside Building 15
+  { x: RIGHT_X, y: rowY(1), width: COL_W, height: ROW_H },
 ];
 
 export const TREES: { x: number; y: number; r: number }[] = [

@@ -1,4 +1,3 @@
-// Phase 1 fixtures. Services, opening hours and announcements are illustrative, not live campus notices.
 export const categories = ['All', 'Library', 'Cafeteria', 'Clinic', 'Labs', 'Services'] as const;
 export type Category = typeof categories[number];
 export type Facility = { id: string; name: string; category: Category; building: string; locationId: string; description: string; hours: string; services: string[] };

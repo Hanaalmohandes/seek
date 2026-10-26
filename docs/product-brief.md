@@ -1,36 +1,43 @@
 # Seek — product brief
 
-Sprint 01 covers Member 1’s campus navigation UI. Search results, route previews and opening hours use sample data; live search, GPS and route-finding are planned for Phase 2.
-
 ## Problem
-New BUE students struggle to find buildings, faculties, labs and offices on a large campus,
-and to plan their day around lectures in different buildings.
+
+BUE students and visitors need a clear way to find campus places, view services and organise lectures.
 
 ## Users
-BUE students (especially first-years), visitors and new staff.
 
-## Product scope
+Students, visitors and new university staff.
 
-The first three items have UI prototype screens in this repository. The final two are planned team features.
+## Current module scope
 
-## Core features
-1. Interactive campus map following the official BUE campus map, with building details (Member 1)
-2. Location search by faculty, lab, office or building (Member 1)
-3. Walking directions from the nearest gate or any building (Member 1)
-4. Facilities, announcements and favourites (Members 2 and 4)
-5. Personal academic schedule with lecture reminders (Member 3)
+Seek is a UI prototype with four feature modules:
+
+- **Campus:** illustrated map, building details, sample search results and route previews.
+- **Schedule:** sample timetable, lecture details and lecture form screens.
+- **Facilities:** service browsing, search, facility details and bilingual sample announcements.
+- **Personal Hub:** dashboard, locally saved favorites, profile editing, photo selection and reminder preferences.
+
+Profile details and favorites save on the device. The timetable, campus notices, opening hours and route previews remain sample data. Cloud accounts, live GPS, live university data and notification delivery are planned work.
 
 ## Screen map
 
+```text
+Root stack
+├─ Main tabs
+│  ├─ Home /                Dashboard and shortcuts
+│  ├─ Map /map              Select a building → Details or Directions
+│  ├─ Schedule /schedule    Select a lecture → Details or Edit
+│  ├─ Facilities /facilities
+│  │                        Select a facility → Details or Announcements
+│  ├─ Profile /profile      Student information and local preferences
+│  └─ Search /search        Open from Home or Map; hidden from the tab bar
+├─ Favorites /favorites     Open from Home → Pin places or Get directions
+├─ Building /building/[id]
+├─ Directions /directions/[id]
+├─ Facility /facility/[id]
+├─ Announcements /announcements
+├─ Lecture /lecture/[id]
+└─ Lecture form /lecture/edit
 ```
-Root Stack (src/app/_layout.tsx)
-├─ (tabs)  Bottom tabs (src/app/(tabs)/_layout.tsx)
-│  ├─ index   Campus Map ───── tap building → panel ─┬─ Details ──► building/[id]
-│  │                                                 └─ Directions ─► directions/[id]
-│  └─ search  Location Search ─ tap building ──────────► building/[id]
-│                              └ tap place ───────────► directions/[id]
-├─ building/[id]    Building Details  ── Get directions ─► directions/[id]   params: id
-└─ directions/[id]  Directions                                              params: id, from?
-```
-Navigator choice: tabs for equal top-level areas, a stack screen for drilling into one place.
-Teammates add their feature tabs (Schedule, Facilities, Profile) to the same tab bar.
+
+Tabs connect the main areas. Stack navigation provides a clear return path from details, Favorites and forms. Feature code lives in `src/features/`; shared controls, tokens and typed navigation are separate from the screens.
