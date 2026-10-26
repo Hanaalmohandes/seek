@@ -8,22 +8,15 @@ import { AppButton } from '@/components/ui/AppButton';
 import { Chip } from '@/components/ui/Chip';
 import { IconButton } from '@/components/ui/IconButton';
 import { Input } from '@/components/ui/Input';
-import { useLocations } from '@/features/campus/hooks/useLocations';
+import { useLocations } from '@/features/campus';
 import { routes, type LectureFormParams } from '@/navigation/types';
 import { colors } from '@/theme/tokens';
 
 import { Notice } from '../components/Notice';
-import {
-  DAYS,
-  REMINDER_OPTIONS,
-  ROOM_SUGGESTIONS,
-  SAMPLE_DRAFT,
-  SAMPLE_ERRORS,
-  TYPE_META,
-  formatTime,
-} from '../data/samples';
+import { DAYS, REMINDER_OPTIONS, ROOM_SUGGESTIONS, SAMPLE_DRAFT, SAMPLE_ERRORS, TYPE_META } from '../data/samples';
 import { useSchedule } from '../hooks/useSchedule';
 import type { LectureType } from '../types';
+import { formatTime } from '../utils/time';
 
 function Field({ label, error, children }: PropsWithChildren<{ label: string; error?: string | false }>) {
   return (

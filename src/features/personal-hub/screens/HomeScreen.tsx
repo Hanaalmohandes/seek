@@ -1,30 +1,20 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { router, useFocusEffect } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { announcements } from '@/features/facilities/data';
-import { formatTime } from '@/features/schedule/data/samples';
-import { useSchedule } from '@/features/schedule/hooks/useSchedule';
-import type { Day } from '@/features/schedule/types';
+import { announcements } from '@/features/facilities';
+import { formatTime, useSchedule, type Day } from '@/features/schedule';
 import { routes } from '@/navigation/types';
 import { fonts } from '@/theme/tokens';
 
 import { C, Screen, Header, Card, SectionTitle, common } from '../components/HubUI';
-import { DEFAULT_PROFILE, getFavorites, getProfile } from '../data/localData';
+import { usePersonalHub } from '../hooks/usePersonalHub';
 
 export default function HomeScreen() {
   const { lecturesOn } = useSchedule();
-  const [name, setName] = useState(DEFAULT_PROFILE.name);
-  const [savedCount, setSavedCount] = useState(0);
-  const [loadError, setLoadError] = useState(false);
-  useFocusEffect(useCallback(() => {
-    let active = true;
-    Promise.all([getProfile(), getFavorites()]).then(([profile, favorites]) => {
-      if (active) { setName(profile.name); setSavedCount(favorites.length); setLoadError(false); }
-    }).catch(() => { if (active) setLoadError(true); });
-    return () => { active = false; };
-  }, []));
+  const { profile, favoriteIds, loading, loadError, reload } = usePersonalHub();
+  const name = profile.name;
+  const savedCount = favoriteIds.length;
 
   const now = new Date();
   const day = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][now.getDay()];
@@ -45,11 +35,14 @@ export default function HomeScreen() {
       </View>
       <Header eyebrow={now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}
         title={`${greeting}, ${name.split(' ')[0] || 'student'}`} subtitle="Here’s what your day looks like." />
-      {loadError && <Text style={s.error}>Your saved details could not be loaded. Reopen the Hub to try again.</Text>}
+      {loadError && <View style={{ marginBottom: 16 }}>
+        <Text style={s.error}>{loadError}</Text>
+        <Pressable accessibilityRole="button" onPress={() => void reload()}><Text style={s.action}>Retry saved details</Text></Pressable>
+      </View>}
       <View style={s.statsRow}>
         <View style={s.statCard}><Text style={s.statNumber}>{String(lectures.length).padStart(2, '0')}</Text><Text style={s.statLabel}>Lectures today</Text></View>
-        <Pressable accessibilityRole="button" accessibilityLabel={`${savedCount} saved places`} onPress={() => router.push(routes.favorites())} style={[s.statCard, s.statCardPale]}>
-          <Text style={[s.statNumber, { color: C.navy }]}>{String(savedCount).padStart(2, '0')}</Text><Text style={[s.statLabel, { color: C.muted }]}>Saved places</Text>
+        <Pressable accessibilityRole="button" accessibilityLabel={loading ? 'Loading saved places' : loadError ? 'Saved places unavailable' : `${savedCount} saved places`} onPress={() => router.push(routes.favorites())} style={[s.statCard, s.statCardPale]}>
+          <Text style={[s.statNumber, { color: C.navy }]}>{loading || loadError ? '—' : String(savedCount).padStart(2, '0')}</Text><Text style={[s.statLabel, { color: C.muted }]}>Saved places</Text>
         </Pressable>
       </View>
       <SectionTitle title="Your campus shortcuts" />

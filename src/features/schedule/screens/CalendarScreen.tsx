@@ -10,9 +10,10 @@ import { colors } from '@/theme/tokens';
 import { LectureCard } from '../components/LectureCard';
 import { Notice } from '../components/Notice';
 import { WeekGrid } from '../components/WeekGrid';
-import { DAYS, SAMPLE_TODAY, SAMPLE_WEEK, formatTime } from '../data/samples';
+import { DAYS, SAMPLE_TODAY, SAMPLE_WEEK } from '../data/samples';
 import { useSchedule } from '../hooks/useSchedule';
 import type { Day } from '../types';
+import { formatTime } from '../utils/time';
 
 type Mode = 'day' | 'week';
 

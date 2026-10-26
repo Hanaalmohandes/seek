@@ -6,15 +6,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppButton } from '@/components/ui/AppButton';
 import { Card } from '@/components/ui/Card';
 import { IconButton } from '@/components/ui/IconButton';
-import { BuildingPlate } from '@/features/campus/components/BuildingPlate';
-import { BuildingHero } from '@/features/campus/components/BuildingHero';
-import { useLocations } from '@/features/campus/hooks/useLocations';
+import { BuildingPlate, BuildingHero, useLocations } from '@/features/campus';
 import { routes, type LectureParams } from '@/navigation/types';
 import { colors } from '@/theme/tokens';
 
 import { TypeBadge } from '../components/TypeBadge';
-import { DAYS, formatTime, reminderLabel, toMinutes } from '../data/samples';
+import { DAYS } from '../data/samples';
 import { useSchedule } from '../hooks/useSchedule';
+import { formatTime, reminderLabel, toMinutes } from '../utils/time';
 
 function Fact({ icon, label, value }: { icon: keyof typeof Ionicons.glyphMap; label: string; value: string }) {
   return (

@@ -1,29 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ActivityIndicator, Alert, Image, Platform, Pressable, StyleSheet, Switch, Text, TextInput, View, type TextInputProps } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { C, Screen, Header, Card, SectionTitle, PrimaryButton } from '../components/HubUI';
-import { getPreferences, getProfile, Preferences, Profile, savePreferences, saveProfile } from '../data/localData';
+import type { Preferences, Profile } from '../types';
+import { usePersonalHub } from '../hooks/usePersonalHub';
 import { fonts } from '@/theme/tokens';
 
 const TIMES = ['10 minutes before', '15 minutes before', '30 minutes before', '1 hour before'];
 
 export default function ProfileScreen() {
-  const [profile, setProfile] = useState<Profile>({ name: '', studentId: '', faculty: '', email: '' });
-  const [prefs, setPrefs] = useState<Preferences>({ remindersEnabled: true, reminderTime: '30 minutes before' });
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [feedback, setFeedback] = useState('');
+  const { loading, loadError, reload } = usePersonalHub();
+  if (loading) return <Screen><ActivityIndicator color={C.navy} accessibilityLabel="Loading profile" /></Screen>;
+  if (loadError) return <Screen>
+    <Header title="Profile & Settings" subtitle={loadError} />
+    <PrimaryButton title="Retry saved details" onPress={() => void reload()} />
+  </Screen>;
+  return <ProfileForm />;
+}
 
-  useEffect(() => {
-    Promise.all([getProfile(), getPreferences()])
-      .then(([p, pref]) => { setProfile(p); setPrefs(pref); })
-      .catch(() => Alert.alert('Could not load settings', 'Please reopen this screen.'))
-      .finally(() => setLoading(false));
-  }, []);
+function ProfileForm() {
+  const { profile: savedProfile, preferences: savedPreferences, savingProfile: saving, updateProfile } = usePersonalHub();
+  const [profile, setProfile] = useState<Profile>(() => ({ ...savedProfile }));
+  const [prefs, setPrefs] = useState<Preferences>(() => ({ ...savedPreferences }));
+  const [feedback, setFeedback] = useState('');
 
   const update = (key: keyof Profile, value: string) => setProfile(prev => ({ ...prev, [key]: value }));
   const choosePhoto = () => {
+    if (saving) return;
     if (Platform.OS === 'web') { void openGallery(); return; }
     Alert.alert('Profile photo', 'Choose where to get your photo from.', [
       { text: 'Camera', onPress: openCamera },
@@ -64,16 +68,11 @@ export default function ProfileScreen() {
   const save = async () => {
     const error = validate();
     if (error) { setFeedback(error); return; }
-    setSaving(true);
     try {
-      await saveProfile(profile);
-      await savePreferences(prefs);
+      await updateProfile(profile, prefs);
       setFeedback('Your profile and preferences have been saved on this device.');
     } catch { setFeedback('Your changes could not be saved. Please try again.'); }
-    finally { setSaving(false); }
   };
-
-  if (loading) return <Screen><ActivityIndicator color={C.navy} accessibilityLabel="Loading profile" /></Screen>;
 
   return (
     <View style={s.page}>
@@ -92,10 +91,10 @@ export default function ProfileScreen() {
 
         <SectionTitle title="Student information" />
         <Card>
-          <Field label="Full name" value={profile.name} placeholder="Enter your full name" onChangeText={v => update('name', v)} />
-          <Field label="Student ID" value={profile.studentId} placeholder="e.g. 20240123" keyboardType="number-pad" onChangeText={v => update('studentId', v)} />
-          <Field label="Faculty" value={profile.faculty} placeholder="e.g. Computer Science" onChangeText={v => update('faculty', v)} />
-          <Field label="University email" value={profile.email} placeholder="name@university.edu" keyboardType="email-address" autoCapitalize="none" onChangeText={v => update('email', v)} last />
+          <Field disabled={saving} label="Full name" value={profile.name} placeholder="Enter your full name" onChangeText={v => update('name', v)} />
+          <Field disabled={saving} label="Student ID" value={profile.studentId} placeholder="e.g. 20240123" keyboardType="number-pad" onChangeText={v => update('studentId', v)} />
+          <Field disabled={saving} label="Faculty" value={profile.faculty} placeholder="e.g. Computer Science" onChangeText={v => update('faculty', v)} />
+          <Field disabled={saving} label="University email" value={profile.email} placeholder="name@university.edu" keyboardType="email-address" autoCapitalize="none" onChangeText={v => update('email', v)} last />
         </Card>
 
         <SectionTitle title="Notifications" />
@@ -106,19 +105,19 @@ export default function ProfileScreen() {
               <Text style={s.settingTitle}>Class reminders</Text>
               <Text style={s.settingSubtitle}>Choose your reminder preferences.</Text>
             </View>
-            <Switch accessibilityLabel="Class reminder preference" value={prefs.remindersEnabled} onValueChange={v => setPrefs(p => ({ ...p, remindersEnabled: v }))} trackColor={{ false: '#D8DEE7', true: C.gold }} thumbColor={C.white} />
+            <Switch disabled={saving} accessibilityLabel="Class reminder preference" value={prefs.remindersEnabled} onValueChange={v => setPrefs(p => ({ ...p, remindersEnabled: v }))} trackColor={{ false: '#D8DEE7', true: C.gold }} thumbColor={C.white} />
           </View>
           <View style={s.separator} />
           <Text style={s.fieldLabel}>DEFAULT REMINDER TIME</Text>
           {TIMES.map(time => (
-            <Pressable key={time} accessibilityRole="radio" accessibilityState={{ checked: prefs.reminderTime === time, disabled: !prefs.remindersEnabled }} disabled={!prefs.remindersEnabled} onPress={() => setPrefs(p => ({ ...p, reminderTime: time }))} style={[s.timeOption, !prefs.remindersEnabled && { opacity: 0.5 }]}>
+            <Pressable key={time} accessibilityRole="radio" accessibilityState={{ checked: prefs.reminderTime === time, disabled: saving || !prefs.remindersEnabled }} disabled={saving || !prefs.remindersEnabled} onPress={() => setPrefs(p => ({ ...p, reminderTime: time }))} style={[s.timeOption, !prefs.remindersEnabled && { opacity: 0.5 }]}>
               <Text style={[s.timeOptionText, prefs.reminderTime === time && s.timeOptionSelected]}>{time}</Text>
               <View style={[s.radio, prefs.reminderTime === time && s.radioSelected]}>{prefs.reminderTime === time && <View style={s.radioDot} />}</View>
             </Pressable>
           ))}
           {!prefs.remindersEnabled && <Text style={s.disabledNote}>Reminders are currently turned off.</Text>}
         </Card>
-        <PrimaryButton title={saving ? 'Saving…' : 'Save changes'} onPress={save} disabled={saving || loading} />
+        <PrimaryButton title={saving ? 'Saving…' : 'Save changes'} onPress={save} disabled={saving} />
         {!!feedback && <Text accessibilityLiveRegion="polite" style={s.footnote}>{feedback}</Text>}
         <Text style={s.footnote}>Saved on this device. Reminder delivery is not enabled in this UI.</Text>
       </Screen>
@@ -126,10 +125,10 @@ export default function ProfileScreen() {
   );
 }
 
-function Field(props: { label: string; value: string; placeholder: string; onChangeText: (v: string) => void; keyboardType?: TextInputProps['keyboardType']; autoCapitalize?: TextInputProps['autoCapitalize']; last?: boolean }) {
+function Field(props: { label: string; value: string; placeholder: string; onChangeText: (v: string) => void; keyboardType?: TextInputProps['keyboardType']; autoCapitalize?: TextInputProps['autoCapitalize']; last?: boolean; disabled?: boolean }) {
   return <View style={{ marginBottom: props.last ? 0 : 15 }}>
     <Text style={s.fieldLabel}>{props.label}</Text>
-    <TextInput accessibilityLabel={props.label} value={props.value} placeholder={props.placeholder} placeholderTextColor={C.muted} onChangeText={props.onChangeText}
+    <TextInput editable={!props.disabled} accessibilityLabel={props.label} value={props.value} placeholder={props.placeholder} placeholderTextColor={C.muted} onChangeText={props.onChangeText}
       keyboardType={props.keyboardType || 'default'} autoCapitalize={props.autoCapitalize || 'words'} style={s.input} />
   </View>;
 }

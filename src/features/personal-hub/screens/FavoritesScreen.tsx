@@ -1,39 +1,16 @@
-import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { routes } from '@/navigation/types';
 import { fonts } from '@/theme/tokens';
 import { C, Screen, Header, Card, SectionTitle } from '../components/HubUI';
-import { CampusPlace, getFavorites, saveFavorites, PLACES } from '../data/localData';
+import { PLACES } from '../data/places';
+import type { CampusPlace } from '../types';
+import { usePersonalHub } from '../hooks/usePersonalHub';
 
 export default function FavoritesScreen() {
-  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
-  useEffect(() => {
-    let active = true;
-    getFavorites()
-      .then(ids => { if (active) setFavoriteIds(ids); })
-      .catch(() => { if (active) setError('Could not load favorites. Please reopen this screen.'); })
-      .finally(() => { if (active) setLoading(false); });
-    return () => { active = false; };
-  }, []);
-
-  const toggle = async (place: CampusPlace) => {
-    if (saving || loading) return;
-    const previous = favoriteIds;
-    const next = favoriteIds.includes(place.id)
-      ? favoriteIds.filter(id => id !== place.id)
-      : [...favoriteIds, place.id];
-    setFavoriteIds(next);
-    setSaving(true);
-    setError('');
-    try { await saveFavorites(next); }
-    catch { setFavoriteIds(previous); setError('Your change could not be saved. Please try again.'); }
-    finally { setSaving(false); }
-  };
+  const { favoriteIds, loading, loadError, favoritesError, savingFavorites: saving, toggleFavorite, reload } = usePersonalHub();
+  const error = loadError || favoritesError;
 
   const saved = PLACES.filter(place => favoriteIds.includes(place.id));
   return (
@@ -43,26 +20,27 @@ export default function FavoritesScreen() {
         <View style={s.summary}>
           <View style={s.summaryIcon}><Ionicons name="bookmark" size={20} color={C.navy} /></View>
           <View style={{ flex: 1 }}>
-            <Text style={s.summaryTitle}>{loading ? 'Loading saved places…' : `${favoriteIds.length} saved ${favoriteIds.length === 1 ? 'place' : 'places'}`}</Text>
+            <Text style={s.summaryTitle}>{loading ? 'Loading saved places…' : loadError ? 'Saved places unavailable' : `${favoriteIds.length} saved ${favoriteIds.length === 1 ? 'place' : 'places'}`}</Text>
             <Text style={s.summaryText}>Pinned locations are saved on this device.</Text>
           </View>
         </View>
 
         {!!error && <Text accessibilityLiveRegion="polite" style={{ color: C.red, marginBottom: 12 }}>{error}</Text>}
+        {loadError && <Pressable accessibilityRole="button" onPress={() => void reload()} style={{ marginBottom: 16 }}><Text style={{ color: C.navy }}>Retry saved places</Text></Pressable>}
         <SectionTitle title="Pinned places" />
-        {loading ? <ActivityIndicator color={C.navy} style={{ marginTop: 30 }} /> : saved.length === 0 ? (
+        {loading ? <ActivityIndicator color={C.navy} style={{ marginTop: 30 }} /> : loadError ? null : saved.length === 0 ? (
           <Card style={s.empty}>
             <View style={s.emptyIcon}><Ionicons name="bookmark-outline" size={28} color={C.navy} /></View>
             <Text style={s.emptyTitle}>No favorites yet</Text>
             <Text style={s.emptyText}>Pin a campus location below and it will appear here.</Text>
           </Card>
         ) : saved.map(place => (
-          <PlaceCard key={place.id} place={place} pinned disabled={saving} onToggle={() => toggle(place)} />
+          <PlaceCard key={place.id} place={place} pinned disabled={saving} onToggle={() => void toggleFavorite(place.id)} />
         ))}
 
         <SectionTitle title="Explore campus" />
-        {!loading && PLACES.filter(place => !favoriteIds.includes(place.id)).map(place => (
-          <PlaceCard key={place.id} place={place} pinned={false} disabled={saving} onToggle={() => toggle(place)} />
+        {!loading && !loadError && PLACES.filter(place => !favoriteIds.includes(place.id)).map(place => (
+          <PlaceCard key={place.id} place={place} pinned={false} disabled={saving} onToggle={() => void toggleFavorite(place.id)} />
         ))}
       </Screen>
     </View>

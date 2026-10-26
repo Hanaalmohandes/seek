@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppButton } from '@/components/ui/AppButton';
 import { Card } from '@/components/ui/Card';
 import { Chip } from '@/components/ui/Chip';
-import { announcements, facilities } from '../data';
+import { announcements, facilities } from '../data/samples';
 
 export default function AnnouncementsScreen() {
   const params = useLocalSearchParams<{ facilityId?: string }>();

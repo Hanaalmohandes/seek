@@ -1,24 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import type Ionicons from '@expo/vector-icons/Ionicons';
-import { BUILDINGS } from '@/features/campus/data/campus';
-import { LOCATIONS, TYPE_META } from '@/features/campus/data/locations';
 
-export type CampusPlace = { id: string; name: string; detail: string; category: string; icon: keyof typeof Ionicons.glyphMap };
-const featuredIds = ['library', 'food-court', 'ics', 'eng-labs', 'pharmacy-clinic', 'copy-center'];
-export const PLACES: CampusPlace[] = featuredIds.flatMap(id => {
-  const place = LOCATIONS.find(item => item.id === id);
-  const building = place && BUILDINGS.find(item => item.id === place.buildingId);
-  return place && building ? [{ id, name: place.name, detail: building.title + ' · ' + place.detail,
-    category: TYPE_META[place.type].label, icon: TYPE_META[place.type].icon as CampusPlace['icon'] }] : [];
-});
+import { DEFAULT_FAVORITES, DEFAULT_PREFERENCES, DEFAULT_PROFILE } from '../data/defaults';
+import { PLACES } from '../data/places';
+import type { Preferences, Profile } from '../types';
+
 const FAVORITES_KEY = 'seek:hub:favorites';
 const PROFILE_KEY = 'seek:hub:profile';
 const PREFS_KEY = 'seek:hub:preferences';
-const DEFAULT_FAVORITES = ['library', 'food-court'];
-export type Profile = { name: string; studentId: string; faculty: string; email: string; photoUri?: string };
-export type Preferences = { remindersEnabled: boolean; reminderTime: string };
-export const DEFAULT_PROFILE: Profile = { name: 'Hana', studentId: '239489', faculty: '', email: '' };
-export const DEFAULT_PREFERENCES: Preferences = { remindersEnabled: true, reminderTime: '30 minutes before' };
 
 export async function getFavorites(): Promise<string[]> {
   const raw = await AsyncStorage.getItem(FAVORITES_KEY);
@@ -48,9 +36,6 @@ export async function getProfile(): Promise<Profile> {
     };
   } catch { return { ...DEFAULT_PROFILE }; }
 }
-export async function saveProfile(profile: Profile) {
-  await AsyncStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
-}
 export async function getPreferences(): Promise<Preferences> {
   const raw = await AsyncStorage.getItem(PREFS_KEY);
   if (!raw) return { ...DEFAULT_PREFERENCES };
@@ -65,6 +50,9 @@ export async function getPreferences(): Promise<Preferences> {
     };
   } catch { return { ...DEFAULT_PREFERENCES }; }
 }
-export async function savePreferences(prefs: Preferences) {
-  await AsyncStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
+export async function saveProfileSettings(profile: Profile, prefs: Preferences) {
+  await AsyncStorage.multiSet([
+    [PROFILE_KEY, JSON.stringify(profile)],
+    [PREFS_KEY, JSON.stringify(prefs)],
+  ]);
 }
